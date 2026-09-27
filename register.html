@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - Timpla ni Pogi</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <section class="form-box register-box">
+
+            <h1>Timpla ni Pogi</h1>
+            <p class="subtitle">Create Account</p>
+
+            <form id="registerForm">
+
+                <label for="name">Name</label>
+                <input type="text"
+                       id="name"
+                       placeholder="Enter your name">
+
+                <small id="nameError"></small>
+
+
+                <label for="username">Username</label>
+                <input type="text"
+                       id="username"
+                       placeholder="Enter username">
+
+                <small id="usernameError"></small>
+
+
+                <label for="email">Email</label>
+                <input type="email"
+                       id="email"
+                       placeholder="Enter your email">
+
+                <small id="emailError"></small>
+
+
+                <label for="password">Password</label>
+                <input type="password"
+                       id="password"
+                       placeholder="Enter password">
+
+                <small id="passwordError"></small>
+
+
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password"
+                       id="confirm-password"
+                       placeholder="Confirm password">
+
+                <small id="confirmPasswordError"></small>
+
+
+                <button type="submit">Create Account</button>
+
+                <p id="successMessage"></p>
+
+            </form>
+
+            <p class="register-text">
+                Already have an account?
+                <a href="login.html">Login here</a>
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#registerForm").submit(function (event) {
+
+                event.preventDefault();
+
+                let name = $("#name").val().trim();
+                let username = $("#username").val().trim();
+                let email = $("#email").val().trim();
+                let password = $("#password").val();
+                let confirmPassword = $("#confirm-password").val();
+
+                $("small").text("");
+                $("#successMessage").text("");
+
+                let valid = true;
+
+
+                if (name === "") {
+
+                    $("#nameError").text("Please enter your name.");
+                    valid = false;
+
+                }
+
+
+                if (username === "") {
+
+                    $("#usernameError").text("Please enter a username.");
+                    valid = false;
+
+                } else if (username.length < 3) {
+
+                    $("#usernameError").text(
+                        "Username must be at least 3 characters."
+                    );
+
+                    valid = false;
+                }
+
+
+                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (email === "") {
+
+                    $("#emailError").text("Please enter your email.");
+                    valid = false;
+
+                } else if (!emailPattern.test(email)) {
+
+                    $("#emailError").text(
+                        "Please enter a valid email address."
+                    );
+
+                    valid = false;
+                }
+
+
+                if (password === "") {
+
+                    $("#passwordError").text(
+                        "Please enter a password."
+                    );
+
+                    valid = false;
+
+                } else if (password.length < 6) {
+
+                    $("#passwordError").text(
+                        "Password must be at least 6 characters."
+                    );
+
+                    valid = false;
+                }
+
+
+                if (confirmPassword === "") {
+
+                    $("#confirmPasswordError").text(
+                        "Please confirm your password."
+                    );
+
+                    valid = false;
+
+                } else if (password !== confirmPassword) {
+
+                    $("#confirmPasswordError").text(
+                        "Passwords do not match."
+                    );
+
+                    valid = false;
+                }
+
+
+                if (valid) {
+
+                    let accounts =
+                        JSON.parse(localStorage.getItem("accounts")) || [];
+
+
+                    let existingUser = accounts.find(function (account) {
+                        return account.username === username;
+                    });
+
+
+                    if (existingUser) {
+
+                        $("#usernameError").text(
+                            "Username already exists."
+                        );
+
+                        return;
+                    }
+
+
+                    let newAccount = {
+                        name: name,
+                        username: username,
+                        email: email,
+                        password: password
+                    };
+
+
+                    accounts.push(newAccount);
+
+                    localStorage.setItem(
+                        "accounts",
+                        JSON.stringify(accounts)
+                    );
+
+
+                    alert("Account created successfully!");
+
+                    window.location.href = "login.html";
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+

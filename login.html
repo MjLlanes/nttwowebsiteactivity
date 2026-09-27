@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Timpla ni Pogi</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <section class="form-box">
+
+            <h1>Timpla ni Pogi</h1>
+            <p class="subtitle">Login</p>
+
+            <form id="loginForm">
+
+                <label for="username">Username</label>
+
+                <input type="text"
+                       id="username"
+                       placeholder="Enter username">
+
+
+                <label for="password">Password</label>
+
+                <input type="password"
+                       id="password"
+                       placeholder="Enter password">
+
+
+                <div class="options">
+
+                    <label>
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+
+                    <a href="#">Forgot password?</a>
+
+                </div>
+
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="register-text">
+                Don't have an account?
+                <a href="register.html">Register</a>
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#loginForm").submit(function (event) {
+
+                event.preventDefault();
+
+                let username = $("#username").val().trim();
+                let password = $("#password").val();
+
+
+                if (username === "" || password === "") {
+
+                    alert("Please enter username and password.");
+
+                    return;
+                }
+
+
+                let accounts =
+                    JSON.parse(localStorage.getItem("accounts")) || [];
+
+
+                let account = accounts.find(function (user) {
+
+                    return user.username === username &&
+                           user.password === password;
+
+                });
+
+
+                if (account) {
+
+                    sessionStorage.setItem(
+                        "loggedInUser",
+                        account.username
+                    );
+
+                    sessionStorage.setItem(
+                        "loggedInName",
+                        account.name
+                    );
+
+                    alert("Login successful!");
+
+                    window.location.href = "landing.html";
+
+                } else {
+
+                    alert("Invalid username or password.");
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
